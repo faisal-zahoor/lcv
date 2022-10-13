@@ -1,0 +1,25 @@
+from __future__ import unicode_literals
+import frappe
+from frappe.model.document import Document
+from datetime import date
+
+@frappe.whitelist(allow_guest=True)
+def updateJV(doc,method):
+	jv = frappe.get_doc({
+	"doctype": "Journal Entry",
+	"posting_date": date.today(),
+	"user_remark":doc.name,
+	"naming_series":"OP-JV-.YY.-",
+	"voucher_atype":"Journal Entry",
+	"accounts":[{
+		"is_advance":"No",
+		"cost_center":"Main SB - SHC",
+		"account":"Expenses Included In Valuation - SHC",
+		"credit":doc.total_taxes_and_charges,
+		"credit_in_account_currency":doc.total_taxes_and_charges
+		{
+		
+		}]
+		})
+	jv.insert(ignore_permissions=True)
+	jv.save()
